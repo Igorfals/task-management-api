@@ -7,10 +7,13 @@ import {
     Post,
     Put,
     Query,
+    UseGuards,
 } from '@nestjs/common';
 import { FindAllParameters, TaskDto } from './task.dto';
 import { TaskService } from './task.service';
+import { AuthGuard } from 'src/auth/auth.guard';
 
+@UseGuards(AuthGuard)
 @Controller('task')
 export class TaskController {
     constructor(private readonly taskService: TaskService) {}
@@ -26,8 +29,8 @@ export class TaskController {
     }
 
     @Get()
-    findAll(@Query() params: FindAllParameters): TaskDto[] {
-        return this.taskService.findAll(params);
+    async findAll(@Query() params: FindAllParameters): Promise<TaskDto[]> {
+        return await this.taskService.findAll(params);
     }
 
     @Put()
